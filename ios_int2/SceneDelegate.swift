@@ -28,15 +28,35 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
           }
         
         private func handleDeepLink(_ url: URL) {
-            guard let path = url.host else { return }
-            print("Deep link path: \(path)")
-            switch path {
-            case "second":
-              navigateToSecondVC()
-            default:
-              break
+//            guard let path = url.host else { return }
+//            print("Deep link path: \(path)")
+//            switch path {
+//            case "second":
+//              navigateToSecondVC()
+//            default:
+//              break
+//            }
+            if url.scheme?.lowercased() == "ctsecond", url.host == "secondpage" {
+                  print("[Scene Deligate] Handling deep link for: \(url.absoluteString)")
+                  navigateToSecondPage()
+                }
+            
+          }
+    
+    func navigateToSecondPage() {
+        print("[Navigation] Navigating to Second Page")
+        if let rootViewController = window?.rootViewController {
+          // Dismiss any existing modals before presenting a new view
+          rootViewController.dismiss(animated: true) {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let secondVC = storyboard.instantiateViewController(withIdentifier: "SecondViewController") as? SecondViewController {
+              rootViewController.present(secondVC, animated: true)
             }
           }
+        }
+      }
+    
+//ctsecond://secondpage
           func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
             if let url = URLContexts.first?.url {
               handleDeepLink(url)
@@ -89,4 +109,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
 }
-
